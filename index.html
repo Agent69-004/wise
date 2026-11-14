@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#163300">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Wise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  /* ============ WISE DESIGN TOKENS ============ */
+  :root {
+    --ink: #0e0f0c;
+    --ink-2: #454745;
+    --ink-3: #6a6c6a;
+    --gray: #868685;
+    --light-gray: #a8aaa8;
+    --border: #e8ebe6;
+    --border-soft: #f0f2ef;
+    --surface: #ffffff;
+    --surface-2: #f5f7f5;
+    --wise-green: #9fe870;
+    --wise-green-hover: #8fd85e;
+    --forest: #163300;
+    --forest-2: #1f4a00;
+    --mint: #e2f6d5;
+    --pastel-green: #cdffad;
+    --positive: #0d7d3a;
+    --positive-bg: #e6f7ec;
+    --danger: #d03238;
+    --danger-bg: #fdecec;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --orange: #f97316;
+    --radius-sm: 12px;
+    --radius-md: 20px;
+    --radius-lg: 28px;
+    --radius-xl: 36px;
+    --radius-pill: 9999px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --tabbar-height: 72px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    line-height: 1.45;
+    font-feature-settings: "calt" on, "ss01" on;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input { font-family: inherit; }
+
+  /* ============ APP FRAME ============ */
+  .app {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    max-width: 540px;
+    margin: 0 auto;
+    position: relative;
+    background: var(--surface);
+  }
+
+  @media (min-width: 541px) {
+    body { background: #e8ebe6; }
+    .app {
+      box-shadow: 0 0 80px rgba(14,15,12,0.08);
+      min-height: 100dvh;
+    }
+  }
+
+  /* ============ STATUS BAR SPACER ============ */
+  .status-spacer { height: var(--safe-top); background: var(--surface); }
+
+  /* ============ TOP BAR ============ */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--surface);
+    position: sticky;
+    top: var(--safe-top);
+    z-index: 50;
+    gap: 12px;
+  }
+
+  /* Wise logo in top bar */
+  .top-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .top-logo svg {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+  .top-logo .wordmark {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .top-actions { display: flex; align-items: center; gap: 6px; }
+
+  .top-icon {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--ink);
+    position: relative;
+    transition: background 0.15s;
+  }
+  .top-icon:active { background: var(--surface-2); }
+  .top-icon .dot {
+    position: absolute;
+    top: 10px; right: 11px;
+    width: 8px; height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+
+  .avatar-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--wise-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: transform 0.15s;
+    margin-left: 4px;
+  }
+  .avatar-btn:active { transform: scale(0.94); }
+
+  /* ============ SCROLL AREA ============ */
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(var(--tabbar-height) + var(--safe-bottom) + 16px);
+  }
+
+  .view { display: none; animation: fadeUp 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+  .view.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .content { padding: 0 20px; }
+
+  /* ============ TYPOGRAPHY ============ */
+  .greeting { font-size: 14px; font-weight: 500; color: var(--ink-2); margin-bottom: 2px; }
+  .h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; color: var(--ink); }
+  .h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.025em; color: var(--ink); }
+  .h3 { font-size: 16px; font-weight: 800; letter-spacing: -0.015em; color: var(--ink); }
+  .label { font-size: 11px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
+  .body { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+  .small { font-size: 12px; font-weight: 500; color: var(--gray); }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 28px 0 12px;
+  }
+  .section-head a {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--forest);
+  }
+
+  /* ============ BALANCE HERO (MOBILE) ============ */
+  .balance-hero {
+    background: var(--forest);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 22px 22px 20px;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .balance-hero::after {
+    content: "";
+    position: absolute;
+    top: -80px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(159,232,112,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .balance-hero .label { color: var(--wise-green); margin-bottom: 6px; }
+  .balance-hero .amount {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .balance-hero .amount .cur {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--wise-green);
+    margin-left: 8px;
+  }
+  .balance-hero .chg {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(159,232,112,0.15);
+    color: var(--wise-green);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+
+  /* ============ QUICK ACTIONS ============ */
+  .quick-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .qa-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    padding: 12px 6px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .qa-btn:active { transform: scale(0.96); }
+  .qa-btn i { font-size: 18px; color: var(--wise-green); }
+  .qa-btn.primary { background: var(--wise-green); color: var(--forest); }
+  .qa-btn.primary i { color: var(--forest); }
+
+  /* ============ CURRENCY CARDS ============ */
+  .currency-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin: 0 -20px;
+    padding: 4px 20px 4px;
+    scrollbar-width: none;
+  }
+  .currency-row::-webkit-scrollbar { display: none; }
+
+  .currency-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    min-width: 140px;
+    flex-shrink: 0;
+    transition: transform 0.1s;
+  }
+  .currency-tile:active { transform: scale(0.97); }
+  .currency-tile .dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .currency-tile .code { font-size: 10px; font-weight: 700; color: var(--gray); letter-spacing: 0.04em; margin-bottom: 2px; }
+  .currency-tile .bal { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+
+  /* ============ SEND WIDGET ============ */
+  .send-widget {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .send-widget-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .fee-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--mint);
+    color: var(--forest);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .fee-pill i { font-size: 9px; }
+
+  .send-input-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 4px 0 14px;
+    border-bottom: 2px solid var(--border);
+    transition: border-color 0.15s;
+  }
+  .send-input-wrap:focus-within { border-bottom-color: var(--wise-green); }
+  .send-input-wrap .sym { font-size: 28px; font-weight: 800; color: var(--ink); }
+  .send-input-wrap input {
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--ink);
+    width: 100%;
+    padding: 0;
+  }
+
+  .send-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13px;
+  }
+  .send-row:last-of-type { border-bottom: none; }
+  .send-row .lbl { color: var(--gray); font-weight: 600; }
+  .send-row .val { font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 6px; }
+  .send-row .val.green { color: var(--positive); font-size: 16px; font-weight: 800; }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.12s, background 0.15s;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--wise-green); color: var(--forest); }
+  .btn-primary:active { background: var(--wise-green-hover); }
+  .btn-forest { background: var(--forest); color: #fff; }
+  .btn-ghost { background: var(--surface-2); color: var(--ink); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--ink); }
+  .btn-block { width: 100%; }
+  .btn-sm { padding: 10px 18px; font-size: 13px; }
+
+  /* ============ TRANSACTIONS ============ */
+  .tx-list { display: flex; flex-direction: column; }
+  .tx-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    gap: 12px;
+    transition: opacity 0.12s;
+  }
+  .tx-item:active { opacity: 0.6; }
+  .tx-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+  .tx-icon {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .tx-name { font-size: 14px; font-weight: 700; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tx-meta { font-size: 12px; color: var(--gray); font-weight: 500; }
+  .tx-amt { font-size: 14px; font-weight: 800; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .tx-amt .sub { font-size: 11px; font-weight: 500; color: var(--gray); margin-top: 1px; }
+  .tx-amt.pos { color: var(--positive); }
+
+  /* ============ CARD VISUAL ============ */
+  .card-widget {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .card-visual {
+    background: linear-gradient(145deg, #1a3a15 0%, #2d5124 55%, #1f3b1a 100%);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    color: #fff;
+    aspect-ratio: 1.586/1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 36px -14px rgba(22,51,0,0.5);
+    margin-bottom: 14px;
+  }
+  .card-visual::before {
+    content: "";
+    position: absolute;
+    top: -50%; right: -25%;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(159,232,112,0.12) 0%, transparent 70%);
+  }
+  .card-visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.04) 50%, transparent 70%);
+    pointer-events: none;
+  }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+  .card-chip { font-size: 20px; opacity: 0.75; }
+  .card-net { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); }
+  .card-num { font-size: 15px; letter-spacing: 2.5px; font-weight: 600; color: rgba(255,255,255,0.9); position: relative; z-index: 1; font-variant-numeric: tabular-nums; }
+  .card-footer { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
+  .card-footer .lbl { font-size: 8px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); margin-bottom: 2px; }
+  .card-footer .val { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.85); }
+  .card-mark { font-size: 14px; font-weight: 800; color: var(--wise-green); letter-spacing: -0.03em; }
+
+  .card-actions { display: flex; gap: 8px; }
+  .card-actions .btn { flex: 1; }
+
+  /* ============ RECIPIENT LIST ============ */
+  .recipient-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    transition: opacity 0.12s;
+  }
+  .recipient-row:active { opacity: 0.6; }
+  .recipient-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .recipient-info { flex: 1; min-width: 0; }
+  .recipient-info .name { font-size: 14px; font-weight: 700; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recipient-info .detail { font-size: 12px; color: var(--gray); font-weight: 500; }
+  .chevron { color: var(--light-gray); font-size: 11px; }
+
+  /* ============ SEND PAGE (MOBILE) ============ */
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 20px;
+  }
+  .back-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--ink);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .back-btn:active { background: #e8ebe6; }
+  .page-header .title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+
+  .step-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .step {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+  }
+  .step.active { background: var(--forest); }
+  .step.done { background: var(--wise-green); }
+
+  .amount-block { text-align: center; padding: 8px 0 28px; }
+  .amount-block .label { margin-bottom: 8px; }
+  .amount-block .big-amount {
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .amount-block .big-amount .cur-sym { color: var(--gray); margin-right: 2px; }
+  .amount-block .sub-amount {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--positive);
+    margin-top: 10px;
+  }
+
+  .currency-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border-radius: var(--radius-pill);
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 8px;
+    transition: background 0.15s;
+  }
+  .currency-pill:active { background: #e8ebe6; }
+  .currency-pill .flag {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .currency-pill i { font-size: 10px; color: var(--gray); }
+
+  .swap-divider {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .swap-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--wise-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(22,51,0,0.2);
+    transition: transform 0.15s;
+  }
+  .swap-btn:active { transform: rotate(180deg); }
+
+  .recipient-chips {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin: 0 -20px;
+    padding: 4px 20px 8px;
+    scrollbar-width: none;
+  }
+  .recipient-chips::-webkit-scrollbar { display: none; }
+  .recipient-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    transition: transform 0.12s;
+  }
+  .recipient-chip:active { transform: scale(0.94); }
+  .recipient-chip .avatar-circle {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .recipient-chip .name { font-size: 11px; font-weight: 600; color: var(--ink-2); max-width: 64px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+
+  .field-block { margin-bottom: 20px; }
+  .field-block .field-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; display: block; }
+  .input-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface-2);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .input-field:focus-within { border-color: var(--wise-green); background: #fff; }
+  .input-field i { color: var(--gray); font-size: 15px; }
+  .input-field input {
+    border: none; outline: none; background: transparent;
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    width: 100%;
+  }
+  .input-field input::placeholder { color: var(--light-gray); font-weight: 500; }
+
+  .summary-box {
+    background: var(--forest);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .summary-box .label { color: var(--wise-green); margin-bottom: 6px; }
+  .summary-box .summary-amount { font-size: 34px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; }
+  .summary-box .summary-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 16px; }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .summary-row:last-of-type { border-bottom: none; }
+  .summary-row .lbl { color: rgba(255,255,255,0.6); font-weight: 500; }
+  .summary-row .val { font-weight: 700; }
+  .summary-row .val.green { color: var(--wise-green); }
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 14px;
+    margin-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .summary-total .val { color: var(--wise-green); }
+
+  /* ============ CARDS PAGE ============ */
+  .card-list { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+  .card-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+  }
+  .card-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .status-badge.active { background: var(--positive-bg); color: var(--positive); }
+  .status-badge.frozen { background: #e8f0fe; color: var(--blue); }
+  .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .card-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13px;
+  }
+  .card-meta-row:last-child { border-bottom: none; }
+  .card-meta-row .lbl { color: var(--gray); font-weight: 600; }
+  .card-meta-row .val { font-weight: 700; }
+
+  .toggle {
+    width: 44px; height: 26px;
+    background: var(--light-gray);
+    border-radius: var(--radius-pill);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    width: 20px; height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle.on { background: var(--wise-green); }
+  .toggle.on::after { transform: translateX(18px); }
+
+  /* ============ RECIPIENTS PAGE ============ */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-2);
+    border-radius: var(--radius-pill);
+    padding: 12px 18px;
+    margin-bottom: 16px;
+  }
+  .search-bar i { color: var(--gray); font-size: 14px; }
+  .search-bar input {
+    border: none; outline: none; background: transparent;
+    font-size: 14px; font-weight: 500; color: var(--ink);
+    width: 100%;
+  }
+  .search-bar input::placeholder { color: var(--gray); }
+
+  .recipient-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+    transition: transform 0.12s, box-shadow 0.15s;
+  }
+  .recipient-card:active { transform: scale(0.98); }
+  .recipient-card .avatar-lg {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .recipient-card .info { flex: 1; min-width: 0; }
+  .recipient-card .info .name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .recipient-card .info .detail { font-size: 12px; color: var(--gray); font-weight: 500; }
+
+  /* ============ ACCOUNT PAGE ============ */
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-top: 8px;
+    text-align: center;
+  }
+  .profile-avatar-xl {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--wise-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 auto 14px;
+  }
+  .profile-card .name { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 2px; }
+  .profile-card .email { font-size: 13px; color: var(--gray); font-weight: 500; margin-bottom: 12px; }
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--positive-bg);
+    color: var(--positive);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .menu-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    transition: background 0.12s;
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item:active { background: var(--surface-2); }
+  .menu-item i.icon {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: var(--surface-2);
+    color: var(--ink-2);
+    flex-shrink: 0;
+  }
+  .menu-item .arrow { margin-left: auto; color: var(--light-gray); font-size: 11px; }
+  .menu-item .badge-pill {
+    margin-left: auto;
+    background: var(--positive-bg);
+    color: var(--positive);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+  }
+
+  /* ============ BOTTOM TAB BAR ============ */
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 540px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 8px 8px calc(8px + var(--safe-bottom));
+    z-index: 100;
+  }
+
+  .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 0;
+    color: var(--gray);
+    font-size: 10px;
+    font-weight: 600;
+    transition: color 0.15s, transform 0.12s;
+    position: relative;
+  }
+  .tab:active { transform: scale(0.92); }
+  .tab i { font-size: 22px; }
+  .tab.active { color: var(--forest); }
+  .tab.active i { color: var(--forest); }
+
+  .tab-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+  }
+  .tab-center-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--wise-green);
+    color: var(--forest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 6px 18px -4px rgba(159,232,112,0.6);
+    transition: transform 0.12s;
+    margin-top: -18px;
+    border: 4px solid var(--surface);
+  }
+  .tab-center-btn:active { transform: scale(0.94); }
+
+  /* ============ UTILITIES ============ */
+  .mt-4 { margin-top: 16px; }
+  .mt-6 { margin-top: 24px; }
+  .mt-8 { margin-top: 32px; }
+  .mb-4 { margin-bottom: 16px; }
+  .text-center { text-align: center; }
+  .hidden { display: none !important; }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--tabbar-height) + var(--safe-bottom) + 20px);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 200;
+    white-space: nowrap;
+    max-width: 90vw;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ============ LARGE PHONE ============ */
+  @media (min-width: 400px) {
+    .h1 { font-size: 32px; }
+    .balance-hero .amount { font-size: 44px; }
+    .amount-block .big-amount { font-size: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ STATUS BAR SPACER ============ -->
+  <div class="status-spacer"></div>
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="top-bar">
+    <!-- Wise logo -->
+    <a href="#" class="top-logo" onclick="navTo('home'); return false;">
+      <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" aria-label="Wise logo">
+        <circle cx="512" cy="512" r="512" fill="#9fe870"/>
+        <path d="M403.99 433.21 276.85 581.79h227.01l25.52-70.07h-97.27L491.56 443l.19-1.84-38.66-66.52h173.87L492.17 745.5h92.23l162.75-447H326.67l77.29 134.71h.03z" fill="#fff"/>
+      </svg>
+      <span class="wordmark">wise</span>
+    </a>
+    <div class="top-actions">
+      <button class="top-icon" onclick="showToast('Search coming soon')"><i class="fas fa-magnifying-glass"></i></button>
+      <button class="top-icon" onclick="showToast('No new notifications')"><i class="far fa-bell"></i><span class="dot"></span></button>
+      <button class="avatar-btn" onclick="navTo('account')" aria-label="Account">WD</button>
+    </div>
+  </header>
+
+  <!-- ============ SCROLL AREA ============ -->
+  <main class="scroll-area" id="scrollArea">
+
+    <!-- ============================================================ -->
+    <!-- VIEW: HOME                                                  -->
+    <!-- ============================================================ -->
+    <div class="view active" id="view-home">
+      <div class="content">
+        <div class="greeting">Good afternoon, Walid 👋</div>
+        <h1 class="h1" style="margin-bottom:16px;">Your money,<br>at a glance.</h1>
+
+        <!-- Balance hero -->
+        <div class="balance-hero">
+          <div class="label">Total balance · USD</div>
+          <div class="amount">$12,847<span style="color:rgba(255,255,255,0.5);">.63</span><span class="cur">USD</span></div>
+          <div class="chg"><i class="fas fa-arrow-trend-up"></i> 3.2% this month</div>
+
+          <div class="quick-actions">
+            <button class="qa-btn primary" onclick="navTo('send')">
+              <i class="fas fa-paper-plane"></i> Send
+            </button>
+            <button class="qa-btn" onclick="showToast('Add money')">
+              <i class="fas fa-plus"></i> Add
+            </button>
+            <button class="qa-btn" onclick="showToast('Convert')">
+              <i class="fas fa-right-left"></i> Convert
+            </button>
+            <button class="qa-btn" onclick="navTo('cards')">
+              <i class="fas fa-credit-card"></i> Cards
+            </button>
+          </div>
+        </div>
+
+        <!-- Currencies -->
+        <div class="section-head">
+          <h2 class="h2">Your currencies</h2>
+          <a href="#" onclick="showToast('Manage currencies'); return false;">Manage</a>
+        </div>
+        <div class="currency-row">
+          <div class="currency-tile">
+            <div class="dot" style="background:#1e3a8a;">US</div>
+            <div class="code">USD</div>
+            <div class="bal">$8,420</div>
+          </div>
+          <div class="currency-tile">
+            <div class="dot" style="background:#1e40af;">EU</div>
+            <div class="code">EUR</div>
+            <div class="bal">€2,105</div>
+          </div>
+          <div class="currency-tile">
+            <div class="dot" style="background:#0f766e;">GB</div>
+            <div class="code">GBP</div>
+            <div class="bal">£1,890</div>
+          </div>
+          <div class="currency-tile">
+            <div class="dot" style="background:#b91c1c;">JP</div>
+            <div class="code">JPY</div>
+            <div class="bal">¥45,200</div>
+          </div>
+        </div>
+
+        <!-- Send widget -->
+        <div class="send-widget">
+          <div class="send-widget-top">
+            <span class="h3">Send money</span>
+            <span class="fee-pill"><i class="fas fa-bolt"></i> 0.42% fee</span>
+          </div>
+          <div class="send-input-wrap">
+            <span class="sym">$</span>
+            <input type="text" value="1,000.00" placeholder="0.00" inputmode="decimal">
+          </div>
+          <div class="send-row">
+            <span class="lbl">Send to</span>
+            <span class="val">🇪🇺 EUR <i class="fas fa-chevron-down" style="font-size:9px; color:var(--gray);"></i></span>
+          </div>
+          <div class="send-row">
+            <span class="lbl">Recipient gets</span>
+            <span class="val green">€912.47</span>
+          </div>
+          <div class="send-row">
+            <span class="lbl">Rate</span>
+            <span class="val" style="font-size:12px;">1 USD = 0.9125 EUR</span>
+          </div>
+          <div class="send-row">
+            <span class="lbl">Total fees</span>
+            <span class="val">$4.20</span>
+          </div>
+          <button class="btn btn-primary btn-block mt-4" onclick="navTo('send')">
+            Continue <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card widget -->
+        <div class="card-widget">
+          <div class="send-widget-top" style="margin-bottom:12px;">
+            <span class="h3">Your card</span>
+            <a href="#" onclick="navTo('cards'); return false;" style="font-size:12px; font-weight:700; color:var(--forest);">Manage</a>
+          </div>
+          <div class="card-visual">
+            <div class="card-top">
+              <i class="fas fa-microchip card-chip"></i>
+              <span class="card-net">VISA</span>
+            </div>
+            <div class="card-num">•••• •••• •••• 4289</div>
+            <div class="card-footer">
+              <div>
+                <div class="lbl">Expires</div>
+                <div class="val">09/27</div>
+              </div>
+              <div class="card-mark">wise</div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-ghost btn-sm" onclick="showToast('Card frozen ❄️')"><i class="fas fa-snowflake"></i> Freeze</button>
+            <button class="btn btn-ghost btn-sm" onclick="navTo('cards')"><i class="fas fa-gear"></i> Settings</button>
+          </div>
+        </div>
+
+        <!-- Recent recipients -->
+        <div class="section-head">
+          <h2 class="h2">Recent recipients</h2>
+          <a href="#" onclick="navTo('recipients'); return false;">See all</a>
+        </div>
+        <div class="recipient-row" onclick="navTo('send')">
+          <div class="recipient-avatar" style="background:#2563eb;">MK</div>
+          <div class="recipient-info">
+            <div class="name">Maria Kovac</div>
+            <div class="detail">EUR · Croatia</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-row" onclick="navTo('send')">
+          <div class="recipient-avatar" style="background:#059669;">JT</div>
+          <div class="recipient-info">
+            <div class="name">James Tanaka</div>
+            <div class="detail">JPY · Japan</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-row" onclick="navTo('send')">
+          <div class="recipient-avatar" style="background:#d97706;">SL</div>
+          <div class="recipient-info">
+            <div class="name">Sophie Laurent</div>
+            <div class="detail">EUR · France</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+
+        <!-- Transactions -->
+        <div class="section-head">
+          <h2 class="h2">Transactions</h2>
+          <a href="#" onclick="showToast('All transactions'); return false;">View all</a>
+        </div>
+        <div class="tx-list">
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon" style="background:#1db954;"><i class="fab fa-spotify"></i></div>
+              <div>
+                <div class="tx-name">Spotify</div>
+                <div class="tx-meta">Today, 09:14</div>
+              </div>
+            </div>
+            <div class="tx-amt">−$9.99<div class="sub">USD</div></div>
+          </div>
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon" style="background:var(--orange);"><i class="fas fa-cart-shopping"></i></div>
+              <div>
+                <div class="tx-name">Whole Foods</div>
+                <div class="tx-meta">Yesterday, 18:42</div>
+              </div>
+            </div>
+            <div class="tx-amt">−$87.43<div class="sub">USD</div></div>
+          </div>
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon" style="background:var(--positive);"><i class="fas fa-building"></i></div>
+              <div>
+                <div class="tx-name">Acme Inc.</div>
+                <div class="tx-meta">May 28, 08:00</div>
+              </div>
+            </div>
+            <div class="tx-amt pos">+$5,250<div class="sub">USD</div></div>
+          </div>
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon" style="background:var(--blue);"><i class="fas fa-mobile-screen"></i></div>
+              <div>
+                <div class="tx-name">Vodafone</div>
+                <div class="tx-meta">May 27, 12:30</div>
+              </div>
+            </div>
+            <div class="tx-amt">−$32.00<div class="sub">USD</div></div>
+          </div>
+          <div class="tx-item">
+            <div class="tx-left">
+              <div class="tx-icon" style="background:var(--pink);"><i class="fas fa-utensils"></i></div>
+              <div>
+                <div class="tx-name">Pret A Manger</div>
+                <div class="tx-meta">May 26, 13:05</div>
+              </div>
+            </div>
+            <div class="tx-amt">−$14.80<div class="sub">USD</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VIEW: SEND MONEY                                            -->
+    <!-- ============================================================ -->
+    <div class="view" id="view-send">
+      <div class="content">
+        <div class="page-header">
+          <button class="back-btn" onclick="navTo('home')"><i class="fas fa-arrow-left"></i></button>
+          <span class="title">Send money</span>
+        </div>
+
+        <div class="step-bar">
+          <div class="step done"></div>
+          <div class="step active"></div>
+          <div class="step"></div>
+        </div>
+
+        <!-- Amount block -->
+        <div class="amount-block">
+          <div class="label">You send</div>
+          <div class="big-amount"><span class="cur-sym">$</span>1,000<span style="color:var(--light-gray);">.00</span></div>
+          <div class="currency-pill">
+            <span class="flag" style="background:#1e3a8a;">US</span> USD
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+
+        <div class="swap-divider">
+          <button class="swap-btn"><i class="fas fa-arrow-down"></i></button>
+        </div>
+
+        <!-- Recipient gets -->
+        <div class="amount-block" style="padding-top:16px;">
+          <div class="label">Recipient gets</div>
+          <div class="big-amount" style="color:var(--positive);">€912<span style="color:var(--light-gray);">.47</span></div>
+          <div class="currency-pill">
+            <span class="flag" style="background:#1e40af;">EU</span> EUR
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div style="margin-top:14px;">
+            <span class="fee-pill"><i class="fas fa-bolt"></i> 0.42% fee · 1 USD = 0.9125 EUR</span>
+          </div>
+        </div>
+
+        <!-- Recipient picker -->
+        <div class="field-block mt-6">
+          <label class="field-label">Choose recipient</label>
+          <div class="recipient-chips">
+            <div class="recipient-chip">
+              <div class="avatar-circle" style="background:#2563eb;">MK</div>
+              <span class="name">Maria</span>
+            </div>
+            <div class="recipient-chip">
+              <div class="avatar-circle" style="background:#059669;">JT</div>
+              <span class="name">James</span>
+            </div>
+            <div class="recipient-chip">
+              <div class="avatar-circle" style="background:#d97706;">SL</div>
+              <span class="name">Sophie</span>
+            </div>
+            <div class="recipient-chip">
+              <div class="avatar-circle" style="background:#7c3aed;">RG</div>
+              <span class="name">Rahul</span>
+            </div>
+            <div class="recipient-chip" onclick="showToast('Add recipient')">
+              <div class="avatar-circle" style="background:var(--forest);"><i class="fas fa-plus"></i></div>
+              <span class="name">New</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reference -->
+        <div class="field-block">
+          <label class="field-label">Reference (optional)</label>
+          <div class="input-field">
+            <i class="fas fa-pen"></i>
+            <input type="text" placeholder="e.g. Rent for May">
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-box">
+          <div class="label">Transfer summary</div>
+          <div class="summary-amount">€912.47</div>
+          <div class="summary-sub">Maria Kovac · EUR · Croatia</div>
+
+          <div class="summary-row">
+            <span class="lbl">You send</span>
+            <span class="val">$1,000.00</span>
+          </div>
+          <div class="summary-row">
+            <span class="lbl">Transfer fee</span>
+            <span class="val">$4.20</span>
+          </div>
+          <div class="summary-row">
+            <span class="lbl">Rate</span>
+            <span class="val" style="font-size:12px;">1 USD = 0.9125 EUR</span>
+          </div>
+          <div class="summary-row">
+            <span class="lbl">Arrives</span>
+            <span class="val green">Today</span>
+          </div>
+
+          <div class="summary-total">
+            <span>Total to pay</span>
+            <span class="val">$1,004.20</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" onclick="showToast('Transfer confirmed ✓')">
+          Confirm transfer <i class="fas fa-check"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VIEW: CARDS                                                 -->
+    <!-- ============================================================ -->
+    <div class="view" id="view-cards">
+      <div class="content">
+        <h1 class="h1" style="margin-bottom:6px;">Cards</h1>
+        <p class="body" style="margin-bottom:20px;">Spend in 50+ currencies, online and in stores.</p>
+
+        <button class="btn btn-primary btn-block" onclick="showToast('Order new card')" style="margin-bottom:20px;">
+          <i class="fas fa-plus"></i> Order new card
+        </button>
+
+        <div class="card-list">
+          <!-- Card 1 -->
+          <div class="card-item">
+            <div class="card-item-top">
+              <span class="status-badge active"><span class="dot"></span> Active</span>
+              <button class="top-icon" style="width:32px; height:32px; font-size:14px;" onclick="showToast('Card options')"><i class="fas fa-ellipsis"></i></button>
+            </div>
+            <div class="card-visual" style="margin-bottom:14px;">
+              <div class="card-top">
+                <i class="fas fa-microchip card-chip"></i>
+                <span class="card-net">VISA</span>
+              </div>
+              <div class="card-num">•••• •••• •••• 4289</div>
+              <div class="card-footer">
+                <div>
+                  <div class="lbl">Expires</div>
+                  <div class="val">09/27</div>
+                </div>
+                <div class="card-mark">wise</div>
+              </div>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Type</span>
+              <span class="val">Debit · Multi-currency</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Monthly limit</span>
+              <span class="val">$5,000.00</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Contactless</span>
+              <div class="toggle on"></div>
+            </div>
+            <div class="card-actions" style="margin-top:14px;">
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Card frozen ❄️')"><i class="fas fa-snowflake"></i> Freeze</button>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Card settings')"><i class="fas fa-gear"></i> Settings</button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card-item">
+            <div class="card-item-top">
+              <span class="status-badge frozen"><span class="dot"></span> Frozen</span>
+              <button class="top-icon" style="width:32px; height:32px; font-size:14px;" onclick="showToast('Card options')"><i class="fas fa-ellipsis"></i></button>
+            </div>
+            <div class="card-visual" style="margin-bottom:14px; filter:grayscale(0.55) brightness(0.82);">
+              <div class="card-top">
+                <i class="fas fa-microchip card-chip"></i>
+                <span class="card-net">VISA</span>
+              </div>
+              <div class="card-num">•••• •••• •••• 7315</div>
+              <div class="card-footer">
+                <div>
+                  <div class="lbl">Expires</div>
+                  <div class="val">03/26</div>
+                </div>
+                <div class="card-mark">wise</div>
+              </div>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Type</span>
+              <span class="val">Virtual · Travel</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Monthly limit</span>
+              <span class="val">$2,000.00</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Contactless</span>
+              <div class="toggle"></div>
+            </div>
+            <div class="card-actions" style="margin-top:14px;">
+              <button class="btn btn-primary btn-sm" onclick="showToast('Card unfrozen ☀️')"><i class="fas fa-sun"></i> Unfreeze</button>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Card settings')"><i class="fas fa-gear"></i> Settings</button>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card-item">
+            <div class="card-item-top">
+              <span class="status-badge active"><span class="dot"></span> Active</span>
+              <button class="top-icon" style="width:32px; height:32px; font-size:14px;" onclick="showToast('Card options')"><i class="fas fa-ellipsis"></i></button>
+            </div>
+            <div class="card-visual" style="margin-bottom:14px;">
+              <div class="card-top">
+                <i class="fas fa-microchip card-chip"></i>
+                <span class="card-net">MASTERCARD</span>
+              </div>
+              <div class="card-num">•••• •••• •••• 0264</div>
+              <div class="card-footer">
+                <div>
+                  <div class="lbl">Expires</div>
+                  <div class="val">12/28</div>
+                </div>
+                <div class="card-mark">wise</div>
+              </div>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Type</span>
+              <span class="val">Debit · Business</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Monthly limit</span>
+              <span class="val">$10,000.00</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="lbl">Contactless</span>
+              <div class="toggle on"></div>
+            </div>
+            <div class="card-actions" style="margin-top:14px;">
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Card frozen ❄️')"><i class="fas fa-snowflake"></i> Freeze</button>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Card settings')"><i class="fas fa-gear"></i> Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VIEW: RECIPIENTS                                            -->
+    <!-- ============================================================ -->
+    <div class="view" id="view-recipients">
+      <div class="content">
+        <h1 class="h1" style="margin-bottom:6px;">Recipients</h1>
+        <p class="body" style="margin-bottom:20px;">People and businesses you send money to.</p>
+
+        <button class="btn btn-primary btn-block" onclick="showToast('Add recipient')" style="margin-bottom:16px;">
+          <i class="fas fa-plus"></i> Add recipient
+        </button>
+
+        <div class="search-bar">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search recipients…">
+        </div>
+
+        <div class="recipient-card">
+          <div class="avatar-lg" style="background:#2563eb;">MK</div>
+          <div class="info">
+            <div class="name">Maria Kovac</div>
+            <div class="detail">EUR · Croatia · IBAN ••••2841</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-card">
+          <div class="avatar-lg" style="background:#059669;">JT</div>
+          <div class="info">
+            <div class="name">James Tanaka</div>
+            <div class="detail">JPY · Japan · Bank ••••7730</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-card">
+          <div class="avatar-lg" style="background:#d97706;">SL</div>
+          <div class="info">
+            <div class="name">Sophie Laurent</div>
+            <div class="detail">EUR · France · IBAN ••••9127</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-card">
+          <div class="avatar-lg" style="background:#7c3aed;">RG</div>
+          <div class="info">
+            <div class="name">Rahul Gupta</div>
+            <div class="detail">INR · India · UPI ••••g@ok</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-card">
+          <div class="avatar-lg" style="background:#db2777;">EW</div>
+          <div class="info">
+            <div class="name">Emma Wilson</div>
+            <div class="detail">GBP · UK · Sort ••••45</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="recipient-card">
+          <div class="avatar-lg" style="background:#0891b2;">CN</div>
+          <div class="info">
+            <div class="name">Carlos Núñez</div>
+            <div class="detail">MXN · Mexico · CLABE ••••8823</div>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VIEW: ACCOUNT                                               -->
+    <!-- ============================================================ -->
+    <div class="view" id="view-account">
+      <div class="content">
+        <h1 class="h1" style="margin-bottom:20px;">Account</h1>
+
+        <div class="profile-card">
+          <div class="profile-avatar-xl">WD</div>
+          <div class="name">Walid Didih</div>
+          <div class="email">walid.didih@example.com</div>
+          <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified account</span>
+        </div>
+
+        <div class="menu-list">
+          <div class="menu-item" onclick="showToast('Profile settings')">
+            <i class="fas fa-user icon"></i>
+            Personal details
+            <i class="fas fa-chevron-right arrow"></i>
+          </div>
+          <div class="menu-item" onclick="showToast('Security settings')">
+            <i class="fas fa-shield-halved icon"></i>
+            Security & privacy
+            <span class="badge-pill">2FA on</span>
+          </div>
+          <div class="menu-item" onclick="showToast('Notifications')">
+            <i class="fas fa-bell icon"></i>
+            Notifications
+            <i class="fas fa-chevron-right arrow"></i>
+          </div>
+          <div class="menu-item" onclick="showToast('Language & region')">
+            <i class="fas fa-globe icon"></i>
+            Language & region
+            <i class="fas fa-chevron-right arrow"></i>
+          </div>
+          <div class="menu-item" onclick="showToast('Statements')">
+            <i class="fas fa-file-invoice icon"></i>
+            Statements
+            <i class="fas fa-chevron-right arrow"></i>
+          </div>
+          <div class="menu-item" onclick="showToast('Payment methods')">
+            <i class="fas fa-credit-card icon"></i>
+            Payment methods
+            <i class="fas fa-chevron-right arrow"></i>
+          </div>
+        </div>
+
+        <div class="menu-list" style="margin-top:16px;">
+          <div class="menu-item" onclick="showToast('Help center')">
+            <i class="fas fa-circle-question icon"></i>
+            Help & support
+            <i class="fas fa-chevron-right arrow"></i>
+          </div>
+          <div class="menu-item" onclick="showToast('Signing out…')" style="color:var(--danger);">
+            <i class="fas fa-arrow-right-from-bracket icon" style="color:var(--danger);"></i>
+            Sign out
+          </div>
+        </div>
+
+        <div style="text-align:center; padding:28px 0 12px; color:var(--light-gray); font-size:11px; font-weight:600;">
+          Wise · v2.48.0 · Made with 🌱
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============ BOTTOM TAB BAR ============ -->
+  <nav class="tab-bar">
+    <a class="tab active" data-page="home" onclick="navTo('home')">
+      <i class="fas fa-house"></i>
+      Home
+    </a>
+    <a class="tab" data-page="cards" onclick="navTo('cards')">
+      <i class="fas fa-credit-card"></i>
+      Cards
+    </a>
+    <div class="tab-center">
+      <button class="tab-center-btn" onclick="navTo('send')" aria-label="Send money">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+    <a class="tab" data-page="recipients" onclick="navTo('recipients')">
+      <i class="fas fa-users"></i>
+      People
+    </a>
+    <a class="tab" data-page="account" onclick="navTo('account')">
+      <i class="fas fa-user"></i>
+      Account
+    </a>
+  </nav>
+
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ============ NAVIGATION ============
+  function navTo(page) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('view-' + page);
+    if (target) target.classList.add('active');
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      if (tab.dataset.page === page) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+
+    document.getElementById('scrollArea').scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // ============ TOAST ============
+  let toastTimer;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+
+  // ============ TOGGLE SWITCHES ============
+  document.querySelectorAll('.toggle').forEach(t => {
+    t.addEventListener('click', (e) => {
+      e.stopPropagation();
+      t.classList.toggle('on');
+    });
+  });
+
+  // ============ SWAP BUTTON ROTATE ============
+  const swapBtn = document.querySelector('.swap-btn');
+  if (swapBtn) {
+    let rotated = false;
+    swapBtn.addEventListener('click', () => {
+      rotated = !rotated;
+      swapBtn.style.transform = rotated ? 'rotate(180deg)' : 'rotate(0deg)';
+      showToast(rotated ? 'Swapped currencies' : 'Swapped back');
+    });
+  }
+
+  // ============ PREVENT DOUBLE-TAP ZOOM ============
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) e.preventDefault();
+    lastTouchEnd = now;
+  }, { passive: false });
+</script>
+
+</body>
+</html>
