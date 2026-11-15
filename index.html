@@ -9,8 +9,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="description" content="Wise — multi-currency money app prototype">
 <title>Wise</title>
+
+<!-- ==================== EXACT WISE LOGO FOR HOME SCREEN ==================== -->
+<!-- SVG Favicon (Browser Tab) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Ccircle cx='512' cy='512' r='512' fill='%239fe870'/%3E%3Cpath d='M403.99 433.21 276.85 581.79h227.01l25.52-70.07h-97.27L491.56 443l.19-1.84-38.66-66.52h173.87L492.17 745.5h92.23l162.75-447H326.67l77.29 134.71h.03z' fill='%23fff'/%3E%3C/svg%3E">
+<!-- Apple Touch Icon (iPhone Home Screen) - Exact Wise SVG on black background -->
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='220' fill='%230e0f0c'/%3E%3Ccircle cx='512' cy='512' r='340' fill='%239fe870'/%3E%3Cpath d='M403.99 433.21 276.85 581.79h227.01l25.52-70.07h-97.27L491.56 443l.19-1.84-38.66-66.52h173.87L492.17 745.5h92.23l162.75-447H326.67l77.29 134.71h.03z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='220' fill='%230e0f0c'/%3E%3Ccircle cx='512' cy='512' r='340' fill='%239fe870'/%3E%3Cpath d='M403.99 433.21 276.85 581.79h227.01l25.52-70.07h-97.27L491.56 443l.19-1.84-38.66-66.52h173.87L492.17 745.5h92.23l162.75-447H326.67l77.29 134.71h.03z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='220' fill='%230e0f0c'/%3E%3Ccircle cx='512' cy='512' r='340' fill='%239fe870'/%3E%3Cpath d='M403.99 433.21 276.85 581.79h227.01l25.52-70.07h-97.27L491.56 443l.19-1.84-38.66-66.52h173.87L492.17 745.5h92.23l162.75-447H326.67l77.29 134.71h.03z' fill='%23fff'/%3E%3C/svg%3E">
+
+<!-- Web App Manifest (Android Home Screen) -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Wise%22%2C%22short_name%22%3A%22Wise%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230e0f0c%22%2C%22theme_color%22%3A%22%23163300%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%25201024%25201024%2527%253E%253Crect%2520width%253D%25271024%2527%2520height%253D%25271024%2527%2520rx%253D%2527220%2527%2520fill%253D%2527%25230e0f0c%2527%252F%253E%253Ccircle%2520cx%253D%2527512%2527%2520cy%253D%2527512%2527%2520r%253D%2527340%2527%2520fill%253D%2527%25239fe870%2527%252F%253E%253Cpath%2520d%253D%2527M403.99%2520433.21%2520276.85%2520581.79h227.01l25.52-70.07h-97.27L491.56%2520443l.19-1.84-38.66-66.52h173.87L492.17%2520745.5h92.23l162.75-447H326.67l77.29%2520134.71h.03z%2527%2520fill%253D%2527%2523fff%2527%252F%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -422,7 +432,7 @@
   <!-- ============ TOP BAR ============ -->
   <header class="top-bar">
     <button class="top-logo" data-act="nav" data-arg="home" aria-label="Wise home">
-      <!-- Exact Wise logo (green circle + white W arrow) -->
+      <!-- Exact Wise logo -->
       <svg viewBox="0 0 1024 1024" aria-hidden="true">
         <circle cx="512" cy="512" r="512" fill="#9fe870"/>
         <path d="M403.99 433.21 276.85 581.79h227.01l25.52-70.07h-97.27L491.56 443l.19-1.84-38.66-66.52h173.87L492.17 745.5h92.23l162.75-447H326.67l77.29 134.71h.03z" fill="#fff"/>
@@ -896,7 +906,6 @@
     </button>`;
 
   function renderRecipients() {
-    // Recents: most recently paid first, then the rest in saved order
     const last = {};
     db.transactions.forEach((t) => { if (t.recipientId) last[t.recipientId] = Math.max(last[t.recipientId] || 0, t.ts); });
     const recents = [...db.recipients].sort((a, b) => (last[b.id] || 0) - (last[a.id] || 0)).slice(0, 3);
@@ -1036,7 +1045,6 @@
   function openSheet(cfg) {
     if (!sheetOpen()) lastFocus = document.activeElement;
     $('sheetTitle').textContent = cfg.title;
-    // Fresh body element each time so no listeners leak between sheets
     const old = $('sheetBody');
     const body = old.cloneNode(false);
     old.replaceWith(body);
@@ -1816,7 +1824,6 @@
     }
   };
 
-  // "Tap again to confirm" for destructive buttons (no blocking browser dialogs)
   function needsConfirm(el) {
     if (!el.dataset.confirm || el.dataset.armed === '1') return false;
     el.dataset.armed = '1';
@@ -1838,7 +1845,6 @@
     fn(el.dataset.arg, el);
   });
 
-  // ============ AMOUNT INPUTS ============
   function sanitize(raw, cur) {
     let v = raw.replace(/[^\d.]/g, '');
     const dot = v.indexOf('.');
@@ -1865,7 +1871,6 @@
 
   $('search').addEventListener('input', (e) => { ui.query = e.target.value; renderRecipientList(); });
 
-  // ============ INIT ============
   renderAll();
   show(currentPage(), false);
   if (db.signedOut) { $('signedOut').hidden = false; appEl.inert = true; }
